@@ -96,7 +96,7 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" && apt-get install -y -q\
 RUN mkdir -p ./tmp
 COPY ./src/requirements/* ./tmp/
 
-ENV REQUIREMENTS_FILES="jetson_orin.txt "
+ENV REQUIREMENTS_FILES="jetsonOrin.txt "
 
 RUN for file in $REQUIREMENTS_FILES; do \
         python3 -m pip install -r ./tmp/$file; \

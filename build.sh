@@ -6,7 +6,7 @@ source ./libraries/devices.sh
 device=$(detect_hostdevice_type)
 echo "Detected device: $device"
 
-DOCKER_DIRNAME="ai-base-docker"
+DOCKER_DIRNAME="AutoDock"
 if [ "$device" = "RASPBERRY_PI" ]; then
     DOCKERFILE_REL_PATH="$DOCKER_DIRNAME/dockerfiles/Dockerfile.raspberrypi"
     echo "Building for Raspberry Pi"
@@ -25,7 +25,7 @@ else
 fi
 
 
-IMAGE_NAME="ai-base-docker"       # IMAGE NAME: if you change this, you have to change the name also in run.sh
+IMAGE_NAME="autodock"               # IMAGE NAME: if you change this, you have to change the name also in run.sh
 IMAGE_TAG="latest"                  # IMAGE TAG: if you change this, you have to change the tag also in run.sh
 echo "Started build for $IMAGE_NAME:$IMAGE_TAG"
 

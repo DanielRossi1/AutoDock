@@ -101,8 +101,10 @@ RUN pip install --upgrade pip
 RUN mkdir -p ./tmp
 COPY ./src/requirements/* ./tmp/
 
-RUN for file in ./tmp/*; do \
-        python3 -m pip install -r $file; \
+ENV REQUIREMENTS_FILES="workstation.txt "
+
+RUN for file in $REQUIREMENTS_FILES; do \
+        python3 -m pip install -r ./tmp/$file; \
     done
 
 # .WHL INSTALL: if you need to download .whl packages from a link

@@ -7,12 +7,12 @@ source ./libraries/devices.sh
 source ./libraries/arguments.sh
 source ./libraries/media.sh
 
-IMAGE_NAME="ai-base-docker"
+IMAGE_NAME="autodock"
 IMAGE_TAG="latest"
 
 echo $IMAGE_NAME:$IMAGE_TAG started!
 
-CONTAINER_NAME="ai-base"
+CONTAINER_NAME="AutoDock"
 
 # x11 forwarding
 echo "Setting x11 forwarding"

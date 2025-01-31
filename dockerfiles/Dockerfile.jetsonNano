@@ -94,7 +94,7 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" && apt-get install -y -q\
 RUN mkdir -p ./tmp
 COPY ./src/requirements/* ./tmp/
 
-ENV REQUIREMENTS_FILES="jetson_nano.txt "
+ENV REQUIREMENTS_FILES="jetsonNano.txt "
 
 ENV OPENBLAS_CORETYPE=ARMV8
 

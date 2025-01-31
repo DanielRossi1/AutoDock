@@ -1,22 +1,5 @@
 #!/bin/bash
 
-################################################################################
-# Script filename: remote.sh
-# 
-# Description: creates a ssh connection to a remote host and creates a docker context to run docker on the remote host
-#
-# Author: Daniel Rossi
-# Date: 24/05/24
-# Version: 1.0
-#
-# Notes: takes as input: email, remote host username, remote host address, remote host password
-#
-# Dependencies: 
-#   - Docker installed on the remote host and on the local machine
-#   - ssh-keygen
-#   - ssh server running on the remote host
-#
-################################################################################
 set -e
 
 echo "Configure your remote connection to the host running the docker"
