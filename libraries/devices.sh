@@ -68,3 +68,44 @@ load_videocameras() {
         return 1
     fi
 }
+
+load_audio_devices() {
+    options=""
+    options+="-v /dev/snd:/dev/snd "
+    options+="-v /dev/bus/usb:/dev/bus/usb "
+    options+="-e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native "
+    options+="-v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native "
+    echo "$options"
+}
+
+load_peripherals(){
+    options=""
+    options+="--group-add gpio "
+    options+="--group-add i2c "
+
+    for i in {0..2}; do
+        if [ -e /dev/i2c-$i ]; then
+            options+="--device=/dev/i2c-$i:/dev/i2c-$i "
+        fi
+    done
+
+    if [ -e /dev/gpiochip0 ]; then
+        options+="--device=/dev/gpiochip0 "
+    fi
+    if [ -e /dev/gpiochip1 ]; then
+        options+="--device=/dev/gpiochip1 "
+    fi
+    if [ -e /dev/spidev0.0 ]; then
+       options+="--device=/dev/spidev0.0 "
+    fi
+    if [ -e /dev/spidev0.1 ]; then
+       options+="--device=/dev/spidev0.1 "
+    fi
+    if [ -e /dev/spidev1.0 ]; then
+       options+="--device=/dev/spidev1.0 "
+    fi
+    if [ -e /dev/spidev1.1 ]; then
+       options+="--device=/dev/spidev1.1 "
+    fi
+    echo "$options"
+}

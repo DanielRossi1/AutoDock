@@ -31,6 +31,7 @@ In addition to presenting this tool, which I believe is highly effective for bet
 - **`project-directory`**: a folder with the name of your research project.
   - **`AutoDock`**: import here the *AutoDock* as submodule.
   - **`src`**: the main directory where you implement the project.
+    - **`project files and dirs ...`**: your stuff
     - **`requirements`**: the directory where you specify all the requirements files
         - **`workstation.txt`**: for your development workstation
         - **`jetsonNano.txt`**: specific for jetson nano
@@ -87,12 +88,6 @@ In addition to presenting this tool, which I believe is highly effective for bet
         ```
         git clone https://github.com/DanielRossi1/AutoDock
         ```
-    - Forking: recommended if you need it but just for a public project (then you create a new branch per each project you need to work on). Click on [Fork](https://github.com/DanielRossi1/AutoDock/fork) and then:
-        ```
-        git clone https://github.com/DanielRossi1/AutoDock
-        cd AutoDock
-        git checkout -b project-branch-name
-        ```
     
     then go to AutoDock directory and build the docker
     ```
@@ -105,10 +100,13 @@ In addition to presenting this tool, which I believe is highly effective for bet
     ./run.sh
     ```
     - params:
-        - (-d /path/to/dir_to_mount): optionally you can specify supplementary volumes (directory) which tipically can be used as data directory (where you store your datasets). You will find it under ```/home/user/src```
-        - (-w): enables the docker to mount a webcam
+        - **-d /path/to/dir_to_mount**: optionally you can specify supplementary volumes (directory) which tipically can be used as data directory (where you store your datasets). You will find it under ```/home/user```
+        - **-w**: enables the docker to mount a webcam
+        - **-a**: load audio devices (microphone and speakers). Please make sure to correctly install audio drivers in the container, otherwise it will not work
+        - **-p**: load I/O pheripherals on embedded devices (such as GPIOs, I2C)
 
-## Coding 🧑🏼‍💻
+
+## Coding with VSCode 🧑🏼‍💻
 To be able to program and execute the code inside the docker at the same time (permanent programming, the files will remain even when the docker is closed) I recommend using [VSCode](https://code.visualstudio.com/).
 
 As extensions to do this I use the following. Go to the VSCode marketplace (CTRL+SHIFT+X) and search for:
@@ -117,14 +115,13 @@ As extensions to do this I use the following. Go to the VSCode marketplace (CTRL
 
 once the extensions have been installed and after launching the docker *run* script, in the menu on the left of VSCode you must select the whale icon (docker), and under the "individual containers" item you will find the container you have just launched with a green arrow next to it. By clicking with the right mouse button on it you will find "attach with VSCode", and this will open a new window for programming inside the docker.
 
-It's not over here, one last step is missing! Go to File>Open Folder -> enter "/home/user" as the path
+It's not over here, one last step is missing! Go to File>Open Folder -> enter `/home/user` as the path
 
 ## Remote Host Connection 🛜
 The script `remote.sh` configurest the local host and the remote host in order to run the docker remotely but develop through VSCode on the local machine. It creates a local SSH key to be used later to attach docker to the remote container, and adds that key into the remote host `~/.ssh/authorized_keys`. Then it creates a local `~/.ssh/config` pointing to that remote host, with the generated key. Finally it updates a docker context on the local machine in order to connect and list the containers running on the remote machine.
 
+The difference between using a basic SSH connection on VSCode to connect to the host machine and establishing a remote container connection (still over SSH) is that, in the second case, it enables VSCode to discover running container on the remote machine and attach to them. This means that you can launch debug sessions.
 ```
-# Usage
-
 chmod +x remote.sh
 ./remote.sh
 ```
@@ -132,7 +129,7 @@ chmod +x remote.sh
 ## Support & solutions ✅
 Here is listed what AutoDock is currently able to install and run:
  - CUDA & cudnn
- - ubunutu packages (apt install)
+ - ubuntu packages (apt install)
  - Python, pip and multiple requirements.txt install
  - Python .whl install
  - Anaconda 
@@ -140,6 +137,10 @@ Here is listed what AutoDock is currently able to install and run:
  - ROS Noetic automatic installation within Dockerfile
  - Pre-configured containers for: Raspbery Pi, NVIDIA Jetson Orin Nano, NVIDIA Jetson Nano
  - Automatic device detection for container build an run
+ - Microphone and speakers
+ - Videocameras
+
+ You can find more information on how to add these solutions in your Dockerfile in `docs/CUSTOMIZATION.md`.
 
 ## License 📜
 

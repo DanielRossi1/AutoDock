@@ -1,13 +1,14 @@
 #!/bin/bash
 
 source libraries/logging.sh
+source libraries/devices.sh
 
 load_arguments(){
     options=""
 
-    while [ "$#" -gt 0 ]; do
-        case "$1" in
-            -w)
+    while getopts "d:waph" opt; do
+        case ${opt} in
+            w)
                 video_devices=$(load_videocameras) 
                 if [ $? -eq 0 ]; then
                     for device in $video_devices; do
@@ -15,7 +16,7 @@ load_arguments(){
                     done
                 fi
                 ;;
-            -d)
+            d)
                 shift
                 directory=$(import_directory "$1")
                 if [ $? -eq 0 ]; then
@@ -26,7 +27,14 @@ load_arguments(){
                     exit 1
                 fi
                 ;;
-            *)
+            a)
+                options+=$(load_audio_devices)
+                ;;
+            
+            p) 
+                options+=$(load_peripherals)
+                ;;
+            \?)
                 log_error "load_arguments: unrecognized argument $1"
                 exit 1
                 ;;
