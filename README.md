@@ -139,6 +139,7 @@ Here is listed what AutoDock is currently able to install and run:
  - Automatic device detection for container build an run
  - Microphone and speakers
  - Videocameras
+ - XBOX 360 Kinect RGB and Depth Camera
 
  You can find more information on how to add these solutions in your Dockerfile in `docs/CUSTOMIZATION.md`.
 

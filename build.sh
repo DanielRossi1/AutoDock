@@ -45,10 +45,11 @@ if [ $? -eq 0 ]; then
     echo "now you can run the image with: ./run.sh"
     echo ""
     echo "Run options:"
-    echo "-d /path/to/specific/folder to mount a specific folder in /home/user/src"
-    echo "-w to mount the first video device found in /dev/video*"
+    echo "-d /path/to/specific/folder to mount a specific folder in /home/user/"
+    echo "-w to mount all the video devices found in /dev/video*"
     echo "-a to enable audio and devices (please make sure to add audio drivers in the Dockerfile)"
     echo "-p to enable peripherals (only for embedded devices)"
+    echo "-i to enable HID devices"
 else
     echo "An error occurred during the image build: $? ."
 fi

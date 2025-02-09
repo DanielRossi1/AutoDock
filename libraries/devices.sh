@@ -70,11 +70,20 @@ load_videocameras() {
 }
 
 load_audio_devices() {
-    options=""
+    local options=""
     options+="-v /dev/snd:/dev/snd "
     options+="-v /dev/bus/usb:/dev/bus/usb "
     options+="-e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native "
     options+="-v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native "
+    echo "$options"
+}
+
+load_hid() {
+    local options=""
+    num_hid=$(ls /dev/hidraw* 2>/dev/null | wc -l)
+    for i in $(seq 0 $((num_hid-1))); do
+        options+="--device=/dev/hidraw$i:/dev/hidraw$i "
+    done
     echo "$options"
 }
 

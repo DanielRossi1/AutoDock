@@ -1,5 +1,5 @@
 #!/bin/bash
 
 log_error(){
-    echo "$1" >> errors.txt
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> errors.txt
 }
