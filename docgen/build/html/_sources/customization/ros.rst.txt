@@ -48,6 +48,40 @@ These lines will install ROS Noetic and the necessary packages to run it in the 
 
 ROS 2
 -----
+ROS 2 is the next generation of ROS, and it is designed to be more modular and scalable than ROS 1. To install ROS 2 in the AutoDock-AI container, add the following lines to the bottom of your Dockerfile:
 
 .. note::
-    This section is still under development. Please check back later for updates.
+    ROS 2 Jazzy requires Ubuntu 24.04. You can start from ``FROM ubuntu:24.04`` in your Dockerfile.
+
+.. code-block:: bash
+
+    # --- ROS 2 Jazzy ---
+    RUN locale  # check for UTF-8
+
+    RUN apt update && apt install -y -q locales
+    RUN locale-gen en_US en_US.UTF-8
+    RUN update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+    ENV LANG en_US.UTF-8
+
+    RUN apt install -y -q software-properties-common
+    RUN add-apt-repository universe
+    RUN apt update && sudo apt install curl -y -q 
+    RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg && \
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | \
+        tee /etc/apt/sources.list.d/ros2.list > /dev/null
+
+    RUN apt update && apt upgrade -y -q && \
+        apt install -y -q \
+        ros-dev-tools \
+        ros-jazzy-desktop
+        
+    RUN echo '#!/bin/bash\nsource /opt/ros/jazzy/setup.bash\nexec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
+
+To properly enable ``colcon build`` in the container, add the following line before the ``CMD`` line in your Dockerfile:
+
+.. code-block:: bash
+
+    ENTRYPOINT ["/entrypoint.sh"] # Always for ROS
+
+.. important::
+    Newer Debian/Ubuntu versions require python packages to be installed only within virtual environments. To bypass this check, add ``--break-system-packages`` when installing python packages.

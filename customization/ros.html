@@ -306,9 +306,41 @@ RUN<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><
 </section>
 <section id="ros-2">
 <h2>ROS 2<a class="headerlink" href="#ros-2" title="Link to this heading">¶</a></h2>
+<p>ROS 2 is the next generation of ROS, and it is designed to be more modular and scalable than ROS 1. To install ROS 2 in the AutoDock-AI container, add the following lines to the bottom of your Dockerfile:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This section is still under development. Please check back later for updates.</p>
+<p>ROS 2 Jazzy requires Ubuntu 24.04. You can start from <code class="docutils literal notranslate"><span class="pre">FROM</span> <span class="pre">ubuntu:24.04</span></code> in your Dockerfile.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># --- ROS 2 Jazzy ---</span>
+RUN<span class="w"> </span>locale<span class="w">  </span><span class="c1"># check for UTF-8</span>
+
+RUN<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>-q<span class="w"> </span>locales
+RUN<span class="w"> </span>locale-gen<span class="w"> </span>en_US<span class="w"> </span>en_US.UTF-8
+RUN<span class="w"> </span>update-locale<span class="w"> </span><span class="nv">LC_ALL</span><span class="o">=</span>en_US.UTF-8<span class="w"> </span><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+ENV<span class="w"> </span>LANG<span class="w"> </span>en_US.UTF-8
+
+RUN<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>-q<span class="w"> </span>software-properties-common
+RUN<span class="w"> </span>add-apt-repository<span class="w"> </span>universe
+RUN<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>curl<span class="w"> </span>-y<span class="w"> </span>-q
+RUN<span class="w"> </span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://raw.githubusercontent.com/ros/rosdistro/master/ros.key<span class="w"> </span>-o<span class="w"> </span>/usr/share/keyrings/ros-archive-keyring.gpg<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [arch=</span><span class="k">$(</span>dpkg<span class="w"> </span>--print-architecture<span class="k">)</span><span class="s2"> signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu </span><span class="k">$(</span>.<span class="w"> </span>/etc/os-release<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$UBUNTU_CODENAME</span><span class="k">)</span><span class="s2"> main&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>tee<span class="w"> </span>/etc/apt/sources.list.d/ros2.list<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+
+RUN<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt<span class="w"> </span>upgrade<span class="w"> </span>-y<span class="w"> </span>-q<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>-q<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ros-dev-tools<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ros-jazzy-desktop
+
+RUN<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;#!/bin/bash\nsource /opt/ros/jazzy/setup.bash\nexec &quot;$@&quot;&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>/entrypoint.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>/entrypoint.sh
+</pre></div>
+</div>
+<p>To properly enable <code class="docutils literal notranslate"><span class="pre">colcon</span> <span class="pre">build</span></code> in the container, add the following line before the <code class="docutils literal notranslate"><span class="pre">CMD</span></code> line in your Dockerfile:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ENTRYPOINT<span class="w"> </span><span class="o">[</span><span class="s2">&quot;/entrypoint.sh&quot;</span><span class="o">]</span><span class="w"> </span><span class="c1"># Always for ROS</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Newer Debian/Ubuntu versions require python packages to be installed only within virtual environments. To bypass this check, add <code class="docutils literal notranslate"><span class="pre">--break-system-packages</span></code> when installing python packages.</p>
 </div>
 </section>
 </section>
