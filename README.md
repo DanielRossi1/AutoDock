@@ -7,7 +7,7 @@ We are excited to announce that our **new documentation** is now available!
 
 🎉 **Check it out** for detailed guides, tutorials, and much more! 🎉
 
-👉 [Visit the New Documentation](https://your-docs-link.com)
+👉 [Visit the New Documentation](https://danielrossi1.github.io/AutoDock/)
 
 Don't miss out on all the amazing content we've prepared for you!
 
