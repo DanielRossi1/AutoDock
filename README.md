@@ -56,9 +56,7 @@ In addition to presenting this tool, which I believe is highly effective for bet
     https://docs.docker.com/engine/install/
    or install docker with the following commands:
    ```
-   wget https://get.docker.com/ -O get_docker.sh
-   chmod +x get_docker.sh
-   bash get_docker.sh
+   curl https://get.docker.com/ | sh 
    ```
 
 3. Once docker has been installed, install nvidia-docker2 for GPU support (otherwise you can follow [this](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) procedure (Recommended) ):
