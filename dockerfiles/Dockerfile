@@ -66,7 +66,6 @@ RUN groupadd -g $GID -o $USER_NAME \
 
 # switch to the created user and set the working directory to its home
 USER $USER_NAME
-WORKDIR $USER_HOME
 
 ENV CUDA_HOME=/usr/local/cuda
 ENV PATH=${CUDA_HOME}/bin:${PATH}
@@ -75,7 +74,8 @@ ENV LD_LIBRARY_PATH=${CUDA_HOME}/lib64:${LD_LIBRARY_PATH}
 ENV VIRTUAL_ENV=$USER_HOME/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 # this variable is used by torch to determine which cuda architectures to build for
-ENV TORCH_CUDA_ARCH_LIST=""
+ENV TORCH_CUDA_ARCH_LIST="8.9;8.6"
+ENV _GLIBCXX_USE_CXX11_ABI=0
 
 WORKDIR $USER_HOME/build_deps
 
@@ -90,11 +90,10 @@ RUN uv pip install pip setuptools wheel packaging ninja Cython --upgrade
 # install the desktop version of autodock
 RUN uv pip install ".[desktop]" --no-build-isolation 
 
-RUN rm -rf $USER_HOME/build_deps
+RUN rm -rf $USER_HOME/app
 RUN uv cache clean
 RUN echo "source ${VIRTUAL_ENV}/bin/activate" >> ~/.bashrc
 
-USER $USER_NAME
 WORKDIR $USER_HOME
 
 # when the container is launched it will start a bash session

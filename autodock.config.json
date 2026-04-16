@@ -1,0 +1,54 @@
+{
+  "ENABLED": false,
+
+  "AUTODOCK_IMAGE_NAME_DEFAULT": "autodock",
+  "AUTODOCK_IMAGE_TAG_DEFAULT": "latest",
+  "AUTODOCK_CONTAINER_NAME_DEFAULT": "AutoDock",
+  "AUTODOCK_BUILD_USER_NAME_DEFAULT": "user",
+  "AUTODOCK_SHM_SIZE_DEFAULT": "2GB",
+  "AUTODOCK_WORKDIR_DEFAULT": "/home/user",
+  "AUTODOCK_NETWORK_MODE_DEFAULT": "host",
+
+  "AUTODOCK_LOG_LEVEL": "INFO",
+  "AUTODOCK_LOG_FILE": "errors.txt",
+
+  "RUN": {
+    "rebuild": false,
+    "no_build": false,
+    "no_rm": false,
+    "detach": false,
+    "no_gpu": false,
+
+    "image": null,
+    "tag": null,
+    "name": null,
+    "run_user": null,
+    "build_user_name": null,
+    "workdir": null,
+    "shm_size": null,
+    "network": null,
+
+    "audio": false,
+    "hid": false,
+    "peripherals": false,
+    "webcam": false,
+
+    "dirs": [],
+    "data": null,
+    "mounts": [],
+    "ssh": false,
+    "ssh_agent": false,
+    "gitconfig": false,
+    "cache": false,
+
+    "env": {
+      "set": [],
+      "pass": [],
+      "files": []
+    },
+
+    "ports": [],
+
+    "command": ["bash"]
+  }
+}

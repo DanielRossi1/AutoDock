@@ -20,7 +20,7 @@
 set -euo pipefail
 
 if [ $# -ne 3 ]; then
-  echo "Usage: $0 <remote_connection_name> <remote_usenamer> <remote_host_address>"
+  echo "Usage: $0 <remote_connection_name> <remote_username> <remote_host_address>"
   exit 1
 fi
 
@@ -39,6 +39,10 @@ cat "${key_base}.pub" | ssh "${remote_user}@${remote_host}" \
 
 echo "📝 Updating SSH config for host alias '$remote_name'..."
 ssh_config="$HOME/.ssh/config"
+
+mkdir -p "$(dirname "$ssh_config")"
+touch "$ssh_config"
+
 # Rimuovo eventuali vecchi blocchi per questo host
 awk -v host="$remote_name" '
   $1=="Host" && $2==host { in_block=1; next }

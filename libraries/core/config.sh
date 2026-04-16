@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Default configuration and initialization.
+#
+# Precedence (highest wins):
+#   CLI options > environment variables > config file defaults > hard-coded defaults
+
+# Hard-coded defaults (can be overridden by config file when ENABLED=true)
+AUTODOCK_IMAGE_NAME_DEFAULT="autodock"
+AUTODOCK_IMAGE_TAG_DEFAULT="latest"
+AUTODOCK_CONTAINER_NAME_DEFAULT="AutoDock"
+AUTODOCK_BUILD_USER_NAME_DEFAULT="user"
+AUTODOCK_SHM_SIZE_DEFAULT="2GB"
+AUTODOCK_WORKDIR_DEFAULT="/home/user"
+AUTODOCK_NETWORK_MODE_DEFAULT="host"
+
+AUTODOCK_LOG_LEVEL_DEFAULT="INFO"
+
+# Derived/effective values. These are computed by autodock_config_init().
+AUTODOCK_IMAGE_NAME="${AUTODOCK_IMAGE_NAME:-}"
+AUTODOCK_IMAGE_TAG="${AUTODOCK_IMAGE_TAG:-}"
+AUTODOCK_CONTAINER_NAME="${AUTODOCK_CONTAINER_NAME:-}"
+AUTODOCK_BUILD_USER_NAME="${AUTODOCK_BUILD_USER_NAME:-}"
+AUTODOCK_SHM_SIZE="${AUTODOCK_SHM_SIZE:-}"
+AUTODOCK_WORKDIR="${AUTODOCK_WORKDIR:-}"
+AUTODOCK_NETWORK_MODE="${AUTODOCK_NETWORK_MODE:-}"
+
+AUTODOCK_RUN_USER="${AUTODOCK_RUN_USER:-}"
+
+AUTODOCK_LOG_FILE="${AUTODOCK_LOG_FILE:-}"
+AUTODOCK_LOG_LEVEL="${AUTODOCK_LOG_LEVEL:-}"
+
+# Initialize effective configuration from defaults + optional environment overrides.
+#
+# This function should be called after applying config-file overrides to
+# the *_DEFAULT variables.
+autodock_config_init() {
+    AUTODOCK_IMAGE_NAME="${AUTODOCK_IMAGE_NAME:-$AUTODOCK_IMAGE_NAME_DEFAULT}"
+    AUTODOCK_IMAGE_TAG="${AUTODOCK_IMAGE_TAG:-$AUTODOCK_IMAGE_TAG_DEFAULT}"
+    AUTODOCK_CONTAINER_NAME="${AUTODOCK_CONTAINER_NAME:-$AUTODOCK_CONTAINER_NAME_DEFAULT}"
+    AUTODOCK_BUILD_USER_NAME="${AUTODOCK_BUILD_USER_NAME:-$AUTODOCK_BUILD_USER_NAME_DEFAULT}"
+    AUTODOCK_SHM_SIZE="${AUTODOCK_SHM_SIZE:-$AUTODOCK_SHM_SIZE_DEFAULT}"
+    AUTODOCK_WORKDIR="${AUTODOCK_WORKDIR:-$AUTODOCK_WORKDIR_DEFAULT}"
+    AUTODOCK_NETWORK_MODE="${AUTODOCK_NETWORK_MODE:-$AUTODOCK_NETWORK_MODE_DEFAULT}"
+
+    # Logging defaults
+    AUTODOCK_LOG_LEVEL="${AUTODOCK_LOG_LEVEL:-$AUTODOCK_LOG_LEVEL_DEFAULT}"
+
+    if [ -z "${AUTODOCK_LOG_FILE:-}" ]; then
+        if [ -n "${AUTODOCK_ROOT:-}" ]; then
+            AUTODOCK_LOG_FILE="$AUTODOCK_ROOT/errors.txt"
+        else
+            AUTODOCK_LOG_FILE="errors.txt"
+        fi
+    fi
+}

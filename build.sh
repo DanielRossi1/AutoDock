@@ -1,55 +1,16 @@
 #!/bin/bash
 
-source ./libraries/devices.sh
+set -euo pipefail
 
-# Detect the device type
-device=$(detect_hostdevice_type)
-echo "Detected device: $device"
+AUTODOCK_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export AUTODOCK_ROOT
 
-DOCKER_DIRNAME="AutoDock"
-if [ "$device" = "RASPBERRY_PI" ]; then
-    DOCKERFILE_REL_PATH="$DOCKER_DIRNAME/dockerfiles/Dockerfile.raspberrypi"
-    echo "Building for Raspberry Pi"
-elif [ "$device" = "JETSON_NANO" ]; then
-    DOCKERFILE_REL_PATH="$DOCKER_DIRNAME/dockerfiles/Dockerfile.jetsonNano"
-    echo "Building for Nvidia Jetson Nano"
-elif [ "$device" = "JETSON_ORIN_NANO" ]; then
-    DOCKERFILE_REL_PATH="$DOCKER_DIRNAME/dockerfiles/Dockerfile.jetsonOrin"
-    echo "Building for Nvidia Jetson Orin"
-elif [ "$device" = "DESKTOP_COMPUTER" ]; then
-    DOCKERFILE_REL_PATH="$DOCKER_DIRNAME/dockerfiles/Dockerfile"
-    echo "Building for default desktop environment"
-else
-    echo "Device not supported yet"
-    exit 1
-fi
+AUTODOCK_REPO_ROOT="$(cd "$AUTODOCK_ROOT/.." && pwd)"
+export AUTODOCK_REPO_ROOT
 
+AUTODOCK_CALLER_DIR="$(pwd)"
+export AUTODOCK_CALLER_DIR
 
-IMAGE_NAME="autodock"               # IMAGE NAME: if you change this, you have to change the name also in run.sh
-IMAGE_TAG="latest"                  # IMAGE TAG: if you change this, you have to change the tag also in run.sh
-echo "Started build for $IMAGE_NAME:$IMAGE_TAG"
+source "$AUTODOCK_ROOT/libraries/apps/build_app.sh"
 
-# Absolute path of the Dockerfile
-MAIN_DIR=$(dirname "$(cd "$(dirname "$0")" && pwd)")
-echo "setting main directory as $MAIN_DIR"
-
-# Run the build of the Docker image
-echo "building: $MAIN_DIR/$DOCKERFILE_REL_PATH"
-docker build -t "$IMAGE_NAME:$IMAGE_TAG" -f "$MAIN_DIR/$DOCKERFILE_REL_PATH" "$MAIN_DIR" \
-        --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER_NAME="user"
-
-
-# Check if the build has been successfully completed
-if [ $? -eq 0 ]; then
-    echo "Build of the image completed successfully."
-    echo "now you can run the image with: ./run.sh"
-    echo ""
-    echo "Run options:"
-    echo "-d /path/to/specific/folder to mount a specific folder in /home/user/"
-    echo "-w to mount all the video devices found in /dev/video*"
-    echo "-a to enable audio and devices (please make sure to add audio drivers in the Dockerfile)"
-    echo "-p to enable peripherals (only for embedded devices)"
-    echo "-i to enable HID devices"
-else
-    echo "An error occurred during the image build: $? ."
-fi
+autodock_build_main "$@"
